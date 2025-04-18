@@ -343,7 +343,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <ClickOutside onClick={() => setSidebarOpen(false)}>
       <aside
-        className={`fixed left-0 top-0 flex z-9999 md:z-999 h-screen w-72.5 flex-col overflow-y-hidden bg-[#F8F8F8] duration-300 ease-linear lg:translate-x-0 ${
+        className={`fixed left-0 top-0 flex z-40 h-screen w-72.5 flex-col overflow-y-hidden bg-[#F8F8F8] duration-300 ease-linear lg:translate-x-0 mt-40 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >

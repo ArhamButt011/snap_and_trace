@@ -5,8 +5,10 @@ import React from 'react'
 const Page = () => {
   return (
     <>
-    <DefaultLayout>
-      <h1 className='text-white'>Dashboard</h1>
+      <DefaultLayout>
+        <div className='bg-[#14141A]'>
+
+        </div>
       </DefaultLayout>
     </>
   )

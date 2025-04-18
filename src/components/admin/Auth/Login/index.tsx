@@ -39,10 +39,10 @@ const Login = () => {
         try {
             const response = await axios.post('/api/auth/login', data)
             const result = response.data
-            toast.success('Login successful')
             localStorage.setItem('token', result.token)
             localStorage.setItem('user', JSON.stringify(result.user))
             window.location.href = '/admin/dashboard'
+            // toast.success('Login successful')
         } catch (error: any) {
             if (error.response) {
                 toast.error(error.response.data.message || 'Login failed')

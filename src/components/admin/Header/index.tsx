@@ -1,16 +1,18 @@
+import Logo from '@/components/user/Header/Logo'
 import DropdownNotification from './DropdownNotification'
 import DropdownUser from './DropdownUser'
+import Link from 'next/link'
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined
   setSidebarOpen: (arg0: boolean) => void
 }) => {
   return (
-    <header className="sticky top-0 z-999 flex w-full bg-white dark:bg-boxdark">
-      <div className="flex flex-grow items-center justify-between px-4 py-4 border-b md:px-6 2xl:px-11">
+    <header className="sticky top-0 flex w-full bg-[#14141A] dark:bg-boxdark">
+      <div className="flex flex-grow items-center justify-between px-4 py-4  md:px-6 2xl:px-11">
         <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
           {/* <!-- Hamburger Toggle BTN --> */}
-          <button
+          {/* <button
             aria-controls="sidebar"
             onClick={(e) => {
               e.stopPropagation()
@@ -49,17 +51,9 @@ const Header = (props: {
                 ></span>
               </span>
             </span>
-          </button>
+          </button> */}
           {/* <!-- Hamburger Toggle BTN --> */}
-
-          {/* <Link className="block flex-shrink-0 lg:hidden" href="/">
-            <Image
-              width={32}
-              height={32}
-              src={'/images/logo/logo-icon.svg'}
-              alt="Logo"
-            />
-          </Link> */}
+          <Logo redirect={false} />
         </div>
 
         <div className="hidden sm:block">
