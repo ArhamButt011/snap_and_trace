@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.blur-background {
+  background: rgba(255, 255, 255, 0.3); /* light glassy background */
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+body {
+  @apply bg-[#14141A] min-h-screen;
+}
