@@ -8,11 +8,17 @@ const Header = (props: {
   setSidebarOpen: (arg0: boolean) => void
 }) => {
   return (
-    <header className="sticky top-0 flex w-full bg-[#14141A] dark:bg-boxdark">
-      <div className="flex flex-grow items-center justify-between px-4 py-4  md:px-6 2xl:px-11">
-        <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
-          {/* <!-- Hamburger Toggle BTN --> */}
-          {/* <button
+    // <header className="sticky top-0 flex w-full bg-[#14141A] dark:bg-boxdark">
+    //   <div className="flex flex-grow items-center justify-between px-4 py-4  md:px-6 2xl:px-11">
+    <header className="sticky top-0 z-50 w-full bg-[#14141A] border-b-1">
+      <div className="flex flex-wrap items-center sm:gap-0 gap-5 sm:justify-between justify-center px-4 py-4">
+
+        <div className="flex items-center">
+          <Logo redirect={false} />
+        </div>
+
+        {/* <!-- Hamburger Toggle BTN --> */}
+        {/* <button
             aria-controls="sidebar"
             onClick={(e) => {
               e.stopPropagation()
@@ -52,11 +58,9 @@ const Header = (props: {
               </span>
             </span>
           </button> */}
-          {/* <!-- Hamburger Toggle BTN --> */}
-          <Logo redirect={false} />
-        </div>
+        {/* <!-- Hamburger Toggle BTN --> */}
 
-        <div className="hidden sm:block">
+        {/* <div className="hidden sm:block">
           <form action="https://formbold.com/s/unique_form_id" method="POST">
             <div className="relative">
               {/* <button className="absolute left-0 top-1/2 -translate-y-1/2">
@@ -83,16 +87,16 @@ const Header = (props: {
                 </svg>
               </button> */}
 
-              {/* <input
+        {/* <input
                 type="text"
                 placeholder="Type to search..."
                 className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
-              /> */}
+              /> 
             </div>
           </form>
-        </div>
+        </div> */}
 
-        <div className="flex items-center gap-3 2xsm:gap-7">
+        <div className="flex items-center gap-8 2xsm:gap-7">
           <DropdownUser />
           <ul className="flex items-center gap-2 2xsm:gap-4">
             <DropdownNotification />

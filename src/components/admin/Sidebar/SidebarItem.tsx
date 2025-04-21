@@ -48,20 +48,38 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
     }
   }, [isItemActive, item.label])
 
+  // return (
+  //   <li>
+  //     <Link
+  //       href={item.route}
+  //       onClick={handleClick}
+  //       className={`${
+  //         isItemActive ? 'text-[#A8E543]' : 'text-primary'
+  //       } group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium  duration-300 ease-in-out dark:hover:bg-meta-4`}
+  //     >
+  //       {isItemActive ? item.iconNotActive : item.icon}
+  //       {item.label}
+  //     </Link>
+  //   </li>
+  // )
+
   return (
     <li>
       <Link
         href={item.route}
         onClick={handleClick}
-        className={`${
-          isItemActive ? 'text-secondary' : ''
-        } group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-primary duration-300 ease-in-out dark:hover:bg-meta-4`}
+        className={`group relative flex items-center gap-3 rounded-md pr-4 pl-8 py-2 font-medium transition-all duration-300 ease-in-out
+          ${isItemActive
+            ? 'text-[#A8E543] before:absolute before:left-0 before:top-1 before:h-9 before:w-4 before:rounded-r-xl before:bg-[#A8E543]'
+            : 'text-[#9CA3AF] hover:bg-meta-4 hover:text-white'}
+        `}
       >
-        {isItemActive ? item.iconNotActive : item.icon}
-        {item.label}
+        <span className="text-lg">{isItemActive ? item.iconNotActive : item.icon}</span>
+        <span className="text-lg">{item.label}</span>
       </Link>
     </li>
   )
+  
 }
 
 export default SidebarItem
