@@ -6,7 +6,7 @@ import user from '/public/images/admin/dashboard/user.svg'
 import { useAuth } from '@/context/AuthContext'
 import { motion, AnimatePresence } from 'framer-motion'
 import userImages from '/public/images/userImage.svg'
-import Bell from '/public/images/admin/dashboard/bell1.svg'
+import Bell from '/public/images/admin/dashboard/Bell1.svg'
 import Modal from '@/components/ui/Modal'
 import Swal from 'sweetalert2'
 import axios, { AxiosError } from 'axios'
@@ -406,7 +406,6 @@ const DropdownUser = () => {
               }}
               className="absolute right-0 mt-4 flex w-72 flex-col rounded-sm bg-[#2B2B31] shadow-default"
             >
-
               <div className=" flex justify-center flex-col items-center py-3">
                 <span className="h-18 w-18 text-center rounded-full">
                   {/* {userData?.image ? ( */}
@@ -504,7 +503,6 @@ const DropdownUser = () => {
                         checked={isActive}
                       />
                       <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#A8E543] dark:peer-checked:bg-[#A8E543]"></div>
-
                     </label>
                   </div>
                 </li>
@@ -588,7 +586,7 @@ const DropdownUser = () => {
               />
             </div>
             <div className="w-full mb-3">
-              <Label htmlFor='firstName'>First Name</Label>
+              <Label htmlFor="firstName">First Name</Label>
               <div>
                 <input
                   type="text"
@@ -601,7 +599,7 @@ const DropdownUser = () => {
               </div>
             </div>
             <div className="w-full">
-              <Label htmlFor='lastName'>Last Name</Label>
+              <Label htmlFor="lastName">Last Name</Label>
               <div>
                 <input
                   type="text"
@@ -645,7 +643,7 @@ const DropdownUser = () => {
           </div>
           <form onSubmit={handleUpdatePassword}>
             <div className="mb-2 relative">
-              <Label htmlFor='oldPassword'>Old Password</Label>
+              <Label htmlFor="oldPassword">Old Password</Label>
               <div className="relative mb-4">
                 <input
                   type={showOldPassword ? 'text' : 'password'}
@@ -670,7 +668,7 @@ const DropdownUser = () => {
               </div>
             </div>
             <div className="mb-2 relative">
-              <Label htmlFor='newPassword'>New Password</Label>
+              <Label htmlFor="newPassword">New Password</Label>
               <div className="relative mb-4">
                 <input
                   type={showNewPassword ? 'text' : 'password'}
@@ -696,7 +694,7 @@ const DropdownUser = () => {
               </div>
             </div>
             <div className="mb-2 relative">
-              <Label htmlFor='confPassword'>Confirm New Password</Label>
+              <Label htmlFor="confPassword">Confirm New Password</Label>
               <div className="relative mb-4">
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
@@ -767,9 +765,7 @@ const DropdownUser = () => {
             >
               Cancel
             </button> */}
-            <Button onClick={() => setIsDeleteOpen(false)}>
-              Cancel
-            </Button>
+            <Button onClick={() => setIsDeleteOpen(false)}>Cancel</Button>
             <Button onClick={handleDelete}>Yes I&apos;m Sure</Button>
           </div>
         </div>
