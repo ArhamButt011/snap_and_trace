@@ -5,45 +5,49 @@ import ClickOutside from '@/components/admin/ClickOutside'
 import user from '/public/images/admin/dashboard/user.svg'
 import { useAuth } from '@/context/AuthContext'
 import { motion, AnimatePresence } from 'framer-motion'
+import dltCircle from '/public/images/admin/allusers/dltCircle.svg'
 import userImages from '/public/images/userImage.svg'
 import Bell from '/public/images/admin/dashboard/Bell1.svg'
 import Modal from '@/components/ui/Modal'
-import Swal from 'sweetalert2'
+import { useNotification } from '@/context/NotificationContext'
 import axios, { AxiosError } from 'axios'
-import blackCross from '/public/images/blackCross.svg'
-// import eye from '/public/images/admin/eye.svg'
+import { showSwal } from '@/utils/swal'
 import WarningIcon from '/public/images/user/warning.svg'
 import EditIcon from '/public/images/editIcon.svg'
-import { FaEye } from 'react-icons/fa'
 import { ClipLoader } from 'react-spinners'
 import Button from '@/components/ui/Button'
 import Text from '@/components/ui/Text'
-import { LuEyeClosed } from 'react-icons/lu'
 import Label from '@/components/ui/Label'
+import Input from '@/components/ui/Input'
 
 const DropdownUser = () => {
-  const [isActive, toggleNotifications] = useState(true)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState<boolean>(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false)
-  const [showOldPassword, setShowOldPassword] = useState<boolean>(false)
-  const [showNewPassword, setShowNewPassword] = useState<boolean>(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
   const [passwordOpen, setPasswordOpen] = useState<boolean>(false)
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [name, setName] = useState('')
-  const [lastName, setLastName] = useState('')
   const [profileImage, setProfileImage] = useState(userImages)
   const [file, setFile] = useState<File | undefined>(undefined)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
-
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const { isActive, toggleNotifications } = useNotification()
   const { logout, userData, setUserData } = useAuth()
+
   const handleLogoutClick = () => {
+    setIsOpen(true)
+  }
+
+  const handleLogout = () => {
     logout()
     window.location.href = '/admin'
+  }
+
+  const onClose = () => {
+    setIsOpen(false)
   }
 
   const handleImageClick = () => {
@@ -53,7 +57,6 @@ const DropdownUser = () => {
   useEffect(() => {
     if (userData) {
       setName(userData.username || '')
-      setLastName(userData.lastName || '')
       setProfileImage(userData.image || userImages)
     }
   }, [userData])
@@ -80,29 +83,15 @@ const DropdownUser = () => {
     setLoading(true)
     try {
       if (newPassword !== confirmPassword) {
-        Swal.fire({
+        showSwal({
           title: 'Error!',
-          text: 'The Passwords are not same',
+          text: 'The New Password and Confirm Password do not match.',
           icon: 'error',
-          showConfirmButton: false,
-          timer: 2000,
-          didOpen: () => {
-            const swalContainer = document.querySelector(
-              '.swal2-container',
-            ) as HTMLElement
-            if (swalContainer) {
-              swalContainer.style.setProperty('z-index', '1000000', 'important')
-            }
-          },
         })
         return
       }
-      // if (!userData) {
-      //   alert('User id not found')
-      //   return
-      // }
-      const id = userData?.id
 
+      const id = userData?.id
       const response = await axios.put('/api/admin/change-password', {
         id,
         oldPassword,
@@ -110,69 +99,38 @@ const DropdownUser = () => {
       })
 
       if (response.data.error) {
-        Swal.fire({
+        showSwal({
           title: 'Error!',
-          text: response?.data?.error ?? 'An unknown error occurred',
+          text: response.data.error ?? 'An unknown error occurred',
           icon: 'error',
-          showConfirmButton: false,
-          timer: 2000,
-          didOpen: () => {
-            const swalContainer = document.querySelector(
-              '.swal2-container',
-            ) as HTMLElement
-            if (swalContainer) {
-              swalContainer.style.setProperty('z-index', '1000000', 'important')
-            }
-          },
         })
       } else {
-        Swal.fire({
+        showSwal({
           title: 'Success',
           text: 'Password Update Successfully',
           icon: 'success',
-          showConfirmButton: false,
-          timer: 2000,
-          didOpen: () => {
-            const swalContainer = document.querySelector(
-              '.swal2-container',
-            ) as HTMLElement
-            if (swalContainer) {
-              swalContainer.style.setProperty('z-index', '1000000', 'important')
-            }
-          },
         })
+
         onPasswordClose()
         setOldPassword('')
         setNewPassword('')
         setConfirmPassword('')
-        setShowConfirmPassword(false)
-        setShowNewPassword(false)
-        setShowOldPassword(false)
       }
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log('api error', error.response?.data?.error)
 
-        Swal.fire({
+        showSwal({
           title: 'Error!',
           text: error.response?.data?.error ?? 'An unknown error occurred',
           icon: 'error',
-          showConfirmButton: false,
-          timer: 2000,
-          didOpen: () => {
-            const swalContainer = document.querySelector(
-              '.swal2-container',
-            ) as HTMLElement
-            if (swalContainer) {
-              swalContainer.style.setProperty('z-index', '1000000', 'important')
-            }
-          },
         })
       }
     } finally {
       setLoading(false)
     }
   }
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const profileImage = e.target.files?.[0]
@@ -186,31 +144,11 @@ const DropdownUser = () => {
   const handleSubmit1 = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // if (!file) {
-    //   Swal.fire({
-    //     title: 'Error!',
-    //     text: 'Please select a file first.',
-    //     icon: 'error',
-    //     showConfirmButton: false,
-    //     timer: 2000,
-    //   })
-    //   return
-    // }
     if (!userData) {
-      Swal.fire({
+      showSwal({
         title: 'Error!',
         text: 'User id not found',
         icon: 'error',
-        showConfirmButton: false,
-        timer: 2000,
-        didOpen: () => {
-          const swalContainer = document.querySelector(
-            '.swal2-container',
-          ) as HTMLElement
-          if (swalContainer) {
-            swalContainer.style.setProperty('z-index', '100000', 'important')
-          }
-        },
       })
       return
     }
@@ -221,7 +159,6 @@ const DropdownUser = () => {
       formData.append('file', file)
     }
     formData.append('name', name)
-    formData.append('lastName', lastName)
     formData.append('id', id)
     setLoading(true)
 
@@ -243,56 +180,35 @@ const DropdownUser = () => {
         setUserData((prevData) => ({
           ...prevData,
           id: prevData?.id || '',
-          name: prevData?.name || '',
+          name: prevData?.username || '',
           email: prevData?.email || '',
           role: prevData?.role || '',
-          username: data.data.name,
-          lastName: data.data.lastName,
+          username: data.data.username,
           image: data.data.image,
         }))
 
-        Swal.fire({
+        showSwal({
           title: 'Success',
           text: 'Data Updated Successfully',
           icon: 'success',
-          showConfirmButton: false,
-          timer: 2000,
-          didOpen: () => {
-            const swalContainer = document.querySelector(
-              '.swal2-container',
-            ) as HTMLElement
-            if (swalContainer) {
-              swalContainer.style.setProperty('z-index', '1000000', 'important')
-            }
-          },
         })
         setName('')
         setProfileImage(userImages)
       } else {
-        Swal.fire({
+
+        showSwal({
           title: 'Error!',
           text: 'File upload failed!',
           icon: 'error',
-          showConfirmButton: false,
-          timer: 2000,
         })
       }
     } catch (error) {
       console.error('Error:', error)
-      Swal.fire({
+
+      showSwal({
         title: 'Error!',
         text: 'An error occurred during file upload.',
         icon: 'error',
-        showConfirmButton: false,
-        timer: 2000,
-        didOpen: () => {
-          const swalContainer = document.querySelector(
-            '.swal2-container',
-          ) as HTMLElement
-          if (swalContainer) {
-            swalContainer.style.setProperty('z-index', '1000000', 'important')
-          }
-        },
       })
     } finally {
       setLoading(false)
@@ -314,20 +230,11 @@ const DropdownUser = () => {
       setIsDeleteOpen(false)
       handleLogoutClick()
     } catch (err) {
-      Swal.fire({
+
+      showSwal({
         title: 'Error!',
         text: err instanceof Error ? err.message : String(err),
         icon: 'error',
-        showConfirmButton: false,
-        timer: 2000,
-        didOpen: () => {
-          const swalContainer = document.querySelector(
-            '.swal2-container',
-          ) as HTMLElement
-          if (swalContainer) {
-            swalContainer.style.setProperty('z-index', '1000000', 'important')
-          }
-        },
       })
     } finally {
       setLoading(false)
@@ -344,29 +251,25 @@ const DropdownUser = () => {
         >
           <span className="text-left">
             <span className="block text-[20px] font-medium text-white">
-              {/* {userData?.username} {userData?.lastName} */}
-              Paul Melone
+              {userData?.username}
             </span>
-            {/* <span className="block text-xs font-normal text-[#00000066]">
-              {userData?.email}
-            </span> */}
           </span>
 
-          {/* {userData?.image ? ( */}
-          <div className="w-[44px] h-[44px] rounded-full overflow-hidden flex-shrink-0">
-            <Image
-              width={44}
-              height={44}
-              src={user}
-              className="w-full h-full object-cover"
-              alt="User"
-            />
-          </div>
-          {/* ) : (
+          {userData?.image ? (
+            <div className="w-[44px] h-[44px] rounded-full overflow-hidden flex-shrink-0">
+              <Image
+                width={44}
+                height={44}
+                src={userData?.image ?? user}
+                className="w-full h-full object-cover"
+                alt="User"
+              />
+            </div>
+          ) : (
             <div className="w-[44px] h-[44px] text-[26.86px] flex items-center justify-center bg-[#F2F2F2] rounded-full text-[#266CA8] font-bold">
               {userData?.username?.charAt(0).toUpperCase()}
             </div>
-          )} */}
+          )}
 
           <svg
             style={{
@@ -391,9 +294,6 @@ const DropdownUser = () => {
         {/* <!-- Dropdown Start --> */}
         <AnimatePresence>
           {dropdownOpen && (
-            // <div
-            //   className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark`}
-            // >
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -407,33 +307,27 @@ const DropdownUser = () => {
               className="absolute right-0 mt-4 flex w-72 flex-col rounded-sm bg-[#2B2B31] shadow-default"
             >
               <div className=" flex justify-center flex-col items-center py-3">
-                <span className="h-18 w-18 text-center rounded-full">
-                  {/* {userData?.image ? ( */}
+                <span className="w-[55px] h-[55px] rounded-full text-center">
+                 {userData?.image ? ( 
                   <Image
-                    width={100}
-                    height={100}
-                    className="rounded-full object-cover"
-                    src={user}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                    }}
+                    width={35}
+                    height={35}
+                    className="w-full h-full rounded-full object-cover"
+                    src={userData?.image ?? user}
                     alt="User"
                   />
-                  {/* ) : (
+                   ) : (
                     <div className="w-[80px] h-[80px] flex items-center justify-center bg-[#F2F2F2] rounded-full text-[#266CA8] font-semibold text-[42.21px]">
                       {userData?.username?.charAt(0).toUpperCase()}
                     </div>
-                  )} */}
+                  )} 
                 </span>
                 <span className="text-center lg:block mt-3">
-                  <span className="block text-[14px] font-semiboldtext-white">
-                    {/* {userData?.username} {userData?.lastName} */}
-                    Paul Melone
+                  <span className="block  text-[20px] font-semibold text-white">
+                    {userData?.username}
                   </span>
-                  <span className="block  text-center text-xs font-normal text-[#FFFFFF99]">
-                    {/* {userData?.email} */}
-                    alexhavaidai123@gmail.com
+                  <span className="block text-center text-base font-normal text-[#FFFFFF99]">
+                    {userData?.email}
                   </span>
                 </span>
               </div>
@@ -492,7 +386,8 @@ const DropdownUser = () => {
                 <li>
                   <div className="flex items-center justify-between gap-2 text-sm font-medium duration-300 ease-in-out lg:text-base">
                     <div className="flex items-center gap-2">
-                      <Image width={27} height={28} src={Bell} alt="bell" />
+                    
+                      <Image width={29} height={30} src={Bell} alt="bell" style={{ width: "auto", height: "auto" }} />
                       Enable Notifications
                     </div>
                     <label className="inline-flex items-center cursor-pointer">
@@ -501,6 +396,7 @@ const DropdownUser = () => {
                         value=""
                         className="sr-only peer"
                         checked={isActive}
+                        onChange={toggleNotifications}
                       />
                       <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#A8E543] dark:peer-checked:bg-[#A8E543]"></div>
                     </label>
@@ -532,7 +428,6 @@ const DropdownUser = () => {
                   </Link>
                 </li>
               </ul>
-              {/* </div> */}
             </motion.div>
           )}
         </AnimatePresence>
@@ -542,80 +437,69 @@ const DropdownUser = () => {
         <form onSubmit={handleSubmit1}>
           {loading && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[100000]">
-              <ClipLoader color="#007bff" size={50} />
+              <ClipLoader color="#A8E543" size={50} />
             </div>
           )}
-          <div className="flex items-center flex-col gap-3">
-            <div className="flex justify-between items-center w-full mb-7">
+          <div className="flex items-center flex-col gap-3 justify-start">
+            <div className="flex justify-start items-center w-full mb-4">
               <Text
                 as="h3"
-                className="text-[#000000] font-semibold text-center flex-grow"
+                className="text-white font-semibold text-start flex-grow"
               >
                 Edit Profile
               </Text>
-              <div>
+            </div>
+            <div className="flex justify-start w-full">
+              <div className='relative cursor-pointer'>
                 <Image
-                  className="cursor-pointer sm:w-[30px] sm:h-[30px]  w-[25px] h-[25px]"
-                  src={blackCross}
-                  alt="cross"
-                  onClick={onEditClose}
+                  src={profileImage}
+                  alt="userImage"
+                  className="rounded-full w-36 h-36 object-cover "
+                  onClick={handleImageClick}
+                  width={200}
+                  height={200}
                 />
-              </div>
-            </div>
-            <div className="relative inline-block">
-              <Image
-                src={profileImage}
-                alt="userImage"
-                className="rounded-full w-36 h-36 object-cover"
-                onClick={handleImageClick}
-                width={200}
-                height={200}
-              />
-              <Image
-                src={EditIcon}
-                alt="editImage"
-                className="absolute top-0 right-0 transform w-[40px] h-[40px]"
-                onClick={handleImageClick}
-              />
-              <input
-                type="file"
-                ref={fileInputRef}
-                accept=".jpg, .jpeg, .png"
-                className="hidden"
-                onChange={handleFileChange}
-              />
-            </div>
-            <div className="w-full mb-3">
-              <Label htmlFor="firstName">First Name</Label>
-              <div>
+                <Image
+                  src={EditIcon}
+                  alt="editImage"
+                  className="absolute top-0 right-0 transform w-[40px] h-[40px]"
+                  onClick={handleImageClick}
+                />
                 <input
-                  type="text"
-                  placeholder="Enter First Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 sm:text-sm text-xs sm:py-3 py-2 mt-1 pr-10 border text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#005B97] rounded-full placeholder:text-sm placeholder:text-xs"
-                  required
+                  type="file"
+                  ref={fileInputRef}
+                  accept=".jpg, .jpeg, .png"
+                  className="hidden"
+                  onChange={handleFileChange}
                 />
               </div>
             </div>
-            <div className="w-full">
-              <Label htmlFor="lastName">Last Name</Label>
-              <div>
-                <input
-                  type="text"
-                  placeholder="Enter Last Name"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="w-full px-4 sm:text-sm text-xs sm:py-3 py-2 mt-1 pr-10 border text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#005B97] rounded-full placeholder:text-sm placeholder:text-xs"
-                  required
-                />
+            <div className="w-full mt-4">
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="password"
+                type="text"
+                value={name}
+                placeholder="Enter Username"
+                onChange={(e) => setName(e.target.value)}
+                withIcon
+                name=''
+                readOnly={true}
+                className="bg-[#FFFFFF1A] border-none text-white placeholder-[#FFFFFF80] rounded-[43.81px]"
+              />
+            </div>
+
+            <div className='w-full'>
+              <div className="flex gap-3 mt-8 w-full max-w-xs justify-start">
+                <Button className='bg-[#FFFFFF1A] text-white' onClick={() => onEditClose()}>
+                  Cancel
+                </Button>
+                <Button type="submit">
+                  Update
+                </Button>
               </div>
             </div>
-            <div className="w-full mt-8">
-              <Button type="submit" className="px-16 w-full">
-                Continue
-              </Button>
-            </div>
+
           </div>
         </form>
       </Modal>
@@ -625,103 +509,64 @@ const DropdownUser = () => {
         <div className="flex flex-col gap-4">
           {loading && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[100000]">
-              <ClipLoader color="#007bff" size={50} />
+              <ClipLoader color="#A8E543" size={50} />
             </div>
           )}
-          <div className="flex justify-between items-center w-full mb-7">
-            <Text as="h3" className="text-[#000000] text-center flex-grow">
+          <div className="flex justify-start items-center w-full mb-7">
+            <Text as="h3" className="text-white text-start flex-grow">
               Change Password
             </Text>
-            <div>
-              <Image
-                src={blackCross}
-                className="cursor-pointer sm:w-[30px] sm:h-[30px]  w-[25px] h-[25px]"
-                alt="cross"
-                onClick={onPasswordClose}
-              />
-            </div>
           </div>
           <form onSubmit={handleUpdatePassword}>
-            <div className="mb-2 relative">
+            <div className="mb-2">
               <Label htmlFor="oldPassword">Old Password</Label>
-              <div className="relative mb-4">
-                <input
-                  type={showOldPassword ? 'text' : 'password'}
-                  placeholder="Enter Old Password"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                  className="w-full px-4 sm:text-sm text-xs sm:py-3 py-2 mt-1 pr-10 border text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#005B97] rounded-full placeholder:text-sm placeholder:text-xs"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowOldPassword(!showOldPassword)}
-                  className="absolute inset-y-0 right-3 top-1/2 transform text-gray-500"
-                  style={{ transform: 'translateY(-40%)' }}
-                >
-                  {showOldPassword ? (
-                    <FaEye size={20} className="text-[#005B97] mr-2" />
-                  ) : (
-                    <LuEyeClosed size={20} className="text-[#005B97] mr-2" />
-                  )}
-                </button>
-              </div>
+              <Input
+                id="password"
+                type="password"
+                value={oldPassword}
+                placeholder="Enter Old Password"
+                onChange={(e) => setOldPassword(e.target.value)}
+                withIcon
+                name=''
+                readOnly={true}
+                className="bg-[#FFFFFF1A] border-none text-white placeholder-[#FFFFFF80] rounded-[43.81px]"
+              />
             </div>
-            <div className="mb-2 relative">
-              <Label htmlFor="newPassword">New Password</Label>
-              <div className="relative mb-4">
-                <input
-                  type={showNewPassword ? 'text' : 'password'}
-                  placeholder="Enter new Password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full px-4 sm:text-sm text-xs sm:py-3 py-2 mt-1 pr-10 border text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#005B97] rounded-full placeholder:text-sm placeholder:text-xs"
-                  required
-                  minLength={8}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowNewPassword(!showNewPassword)}
-                  className="absolute inset-y-0 right-3 top-1/2 transform text-gray-500"
-                  style={{ transform: 'translateY(-40%)' }}
-                >
-                  {showNewPassword ? (
-                    <FaEye size={20} className="text-[#005B97] mr-2" />
-                  ) : (
-                    <LuEyeClosed size={20} className="text-[#005B97] mr-2" />
-                  )}
-                </button>
-              </div>
+
+            <div className="mb-2">
+              <Label htmlFor="oldPassword">New Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={newPassword}
+                placeholder="Enter New Password"
+                onChange={(e) => setNewPassword(e.target.value)}
+                withIcon
+                name=''
+                readOnly={true}
+                className="bg-[#FFFFFF1A] border-none text-white placeholder-[#FFFFFF80] rounded-[43.81px]"
+              />
             </div>
-            <div className="mb-2 relative">
-              <Label htmlFor="confPassword">Confirm New Password</Label>
-              <div className="relative mb-4">
-                <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  placeholder="Enter new Password"
-                  name="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-4 sm:text-sm text-xs sm:py-3 py-2 mt-1 pr-10 border text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#005B97] rounded-full placeholder:text-sm placeholder:text-xs"
-                  required
-                  minLength={8}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute inset-y-0 right-3 top-1/2 transform text-gray-500"
-                  style={{ transform: 'translateY(-40%)' }}
-                >
-                  {showConfirmPassword ? (
-                    <FaEye size={20} className="text-[#005B97] mr-2" />
-                  ) : (
-                    <LuEyeClosed size={20} className="text-[#005B97] mr-2" />
-                  )}
-                </button>
-              </div>
+
+            <div className="mb-2">
+              <Label htmlFor="oldPassword">Confirm New Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={confirmPassword}
+                placeholder="Enter Confirm Password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                withIcon
+                name=''
+                readOnly={true}
+                className="bg-[#FFFFFF1A] border-none text-white placeholder-[#FFFFFF80] rounded-[43.81px]"
+              />
             </div>
-            <div>
-              <Button type="submit" className="px-16 w-full mt-5">
+            <div className="flex gap-3 mt-8 w-full max-w-xs">
+              <Button className='bg-[#FFFFFF1A] text-white' onClick={() => onPasswordClose()}>
+                Cancel
+              </Button>
+              <Button type="submit">
                 Update
               </Button>
             </div>
@@ -733,7 +578,7 @@ const DropdownUser = () => {
         <div className="flex items-center flex-col gap-8">
           {loading && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[100000]">
-              <ClipLoader color="#007bff" size={50} />
+              <ClipLoader color="#A8E543" size={50} />
             </div>
           )}
           <div className="relative flex flex-col items-center">
@@ -759,14 +604,30 @@ const DropdownUser = () => {
           </div>
 
           <div className="w-full flex gap-10 max-w-sm">
-            {/* <button
-              onClick={() => setIsDeleteOpen(false)}
-              className="font-normal text-[#266CA8] border border-[#266CA8] text-[16px] sm:text-[24.56px] bg-white rounded-full p-5 w-full "
-            >
+            
+            <Button onClick={() => setIsDeleteOpen(false)}>
               Cancel
-            </button> */}
-            <Button onClick={() => setIsDeleteOpen(false)}>Cancel</Button>
+            </Button>
             <Button onClick={handleDelete}>Yes I&apos;m Sure</Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Account logout Modal */}
+      <Modal isOpen={isOpen} onClose={onClose} buttonContent="">
+        <div className="flex items-center flex-col">
+          <Image src={dltCircle} alt="dltCircle" className="" />
+          <Text as="h3" className="text-white font-medium mt-2">
+            Logout
+          </Text>
+          <Text as='p' className="font-medium text-primary">
+            Are you sure you want to Logout to your account
+          </Text>
+          <div className="flex gap-3 mt-8 w-full max-w-xs">
+            <Button className='bg-[#FFFFFF1A] text-white' onClick={() => onClose()}>
+              Cancel
+            </Button>
+            <Button onClick={handleLogout}>Yes, Logout</Button>
           </div>
         </div>
       </Modal>

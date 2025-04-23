@@ -31,7 +31,21 @@ export default function RootLayout({
           </AuthProvider>
         </NotificationProvider>
 
-        <ToastContainer position="top-right" autoClose={3000} />
+        {/* <ToastContainer position="top-right" autoClose={3000} theme="dark" /> */}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          toastClassName="custom-toast"
+          progressClassName="custom-toast-progress"
+        />
+
         {/* 
         <NotificationProvider>
             <MyProvider>

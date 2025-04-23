@@ -19,3 +19,18 @@
 body {
   @apply bg-[#14141A] min-h-screen;
 }
+
+.custom-toast {
+  background-color: #2B2B31 !important; 
+  color: #fff !important;
+  border-left: none !important; 
+  border-radius: 8px !important;
+  padding: 16px !important;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Custom body text */
+.custom-toast-body {
+  font-size: 14px !important;
+  color: #e5e7eb !important; 
+}
