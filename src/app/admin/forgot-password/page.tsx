@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 const emailSchema = z.object({
     email: z.string().min(1, { message: 'Email is required' }).email({
@@ -94,7 +95,7 @@ const Login = () => {
             setVerifyLoading(true)
             const response = await axios.post('/api/auth/verify-otp', { email, otp })
             console.log(response)
-    
+
             if (response.data.success) {
                 toast.success('OTP verified successfully.')
                 sessionStorage.setItem('user_email', email)
@@ -145,13 +146,13 @@ const Login = () => {
 
                 <div className="text-left mb-12">
                     {timer > 0 ? (
-                        <span className="text-gray-400 text-sm">Resend in {timer}s</span>
+                        <span className="text-[#A8E543] text-sm">Resend in {timer}s</span>
                     ) : (
                         <span
                             className={`text-accent text-sm hover:underline font-medium cursor-pointer ${otpLoading ? 'pointer-events-none opacity-60' : ''}`}
                             onClick={handleSubmit(sendOTP)}
                         >
-                            {otpLoading ? 'Sending OTP...' : 'Send OTP'}
+                            {otpLoading ? 'Sending OTP...' : showOtp ? 'Resend OTP' : 'Send OTP'}
                         </span>
                     )}
                 </div>
@@ -173,7 +174,12 @@ const Login = () => {
                     ))}
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex gap-3 max-w-[17rem]">
+                    <Link href="/admin" className='w-full'>
+                        <Button className='bg-[#FFFFFF1A] text-white'>
+                            Cancel
+                        </Button>
+                    </Link>
                     <Button
                         variant="primary"
                         className="bg-accent text-black w-full"

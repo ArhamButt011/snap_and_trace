@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Input from '@/components/ui/Input'
 import Label from '@/components/ui/Label'
 import Text from '@/components/ui/Text'
@@ -7,10 +7,12 @@ import Button from '@/components/ui/Button'
 import Link from 'next/link'
 import Logo from '@/components/user/Header/Logo'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'react-toastify'
+import { useAuth } from '@/context/AuthContext'
 
 const loginSchema = z.object({
     email: z.string().min(1, { message: 'Email is required' }).email({
@@ -32,17 +34,29 @@ const Login = () => {
         resolver: zodResolver(loginSchema),
     })
 
+    const { userData } = useAuth()
+    const router = useRouter()
+
     const [isSubmitting, setIsSubmitting] = useState(false)
+
+    useEffect(() => {
+        if (userData) {
+            router.push('/admin/dashboard')
+        }
+    }, [userData])
+
+    const { login } = useAuth()
 
     const onSubmit = async (data: LoginFormValues) => {
         setIsSubmitting(true)
         try {
             const response = await axios.post('/api/auth/login', data)
-            const result = response.data
+            const result = response.data;
+            const { token } = result.token;
+            login(token)
             localStorage.setItem('token', result.token)
             localStorage.setItem('user', JSON.stringify(result.user))
             window.location.href = '/admin/dashboard'
-            // toast.success('Login successful')
         } catch (error: any) {
             if (error.response) {
                 toast.error(error.response.data.message || 'Login failed')

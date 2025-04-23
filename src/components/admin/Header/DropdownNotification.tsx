@@ -7,7 +7,6 @@ import axios from 'axios'
 import userImage from '/public/images/userImage.svg'
 import '@/components/admin/Header/DropdownNotifications.css'
 import { formatDistanceToNowStrict } from 'date-fns'
-// import { database, ref, onValue, update } from '@/firebase'
 import { useNotification } from '@/context/NotificationContext'
 import Text from '@/components/ui/Text'
 
@@ -27,18 +26,6 @@ const DropdownNotification = () => {
   const [notifications, setNotifications] = useState<Notification[]>([])
   const { isActive } = useNotification()
 
-//   useEffect(() => {
-//     const notificationRef = ref(database, 'notifications')
-
-//     const unsubscribe = onValue(notificationRef, (snapshot) => {
-//       if (snapshot.exists()) {
-//         setNotifying(snapshot.val().isNewNotification || false)
-//       }
-//     })
-
-//     return () => unsubscribe()
-//   }, [])
-
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
@@ -57,9 +44,6 @@ const DropdownNotification = () => {
 
     if (notifying) {
       try {
-        // const notificationRef = ref(database, 'notifications')
-        // await update(notificationRef, { isNewNotification: false })
-
         console.log('Updated isNewNotification to false in Firebase')
         setNotifying(false)
       } catch (error) {
@@ -67,7 +51,6 @@ const DropdownNotification = () => {
       }
     }
   }
-
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)}>
       <li className="relative">
@@ -84,45 +67,52 @@ const DropdownNotification = () => {
           <Image src={notification} alt="notifications" />
         </Link>
         {dropdownOpen && (
-          <div className="absolute -right-4  lg:-right-6.4 xl:-right-7 2xl:-right-11 mt-5 flex h-[92.2vh] w-75 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark sm:-right-5 sm:w-[470px]">
+          <div className="absolute px-5 right-1 sm:right-1 lg:right-1 xl:right-1 2xl:right-1 mt-1 flex h-[92.2vh] w-75 flex-col rounded-sm bg-[#2B2B31] shadow-default sm:w-96">
             <div className="px-4.5 py-3">
-              <h5 className="text-[27.94px] font-semibold text-[#000000]">
+              <Text as='h2' className="font-semibold text-white">
                 Notifications
-              </h5>
+              </Text>
             </div>
             <ul className="flex h-auto flex-col overflow-y-auto modal-body-custom pb-7">
-              {notifications?.map((data, index) => (
-                <li key={index}>
-                  <div className="flex flex-col gap-2.5 border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4">
-                    <div className="flex gap-4 items-start">
-                      <div className="w-[45px] h-[45px] rounded-full overflow-hidden flex-shrink-0">
-                        <Image
-                          src={data?.image ? data.image : userImage}
-                          width={60}
-                          height={60}
-                          alt="userImage"
-                          className="object-cover w-full h-full"
-                        />
-                      </div>
+              {notifications?.map((data, index) => {
+                const styledMessage = data.message.replace(
+                  /<b>(.*?)<\/b>/g,
+                  '<b style="color: #FFFFFF;">$1</b>'
+                );
 
-                      <div className="flex flex-col">
-                        <p
-                          className="font-medium text-[14px] sm:text-[16px]"
-                          dangerouslySetInnerHTML={{ __html: data.message }}
-                        />
-                        <Text className="text-[17.94px] text-[#00000066]">
-                          {data.createdAt
-                            ? formatDistanceToNowStrict(
-                                new Date(data.createdAt),
-                                { addSuffix: true },
-                              )
-                            : 'Unknown time'}
-                        </Text>
+                return (
+                  <li key={index}>
+                    <div className="flex flex-col gap-2.5 border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4">
+                      <div className="flex gap-4 items-start">
+                        <div className="w-[45px] h-[45px] rounded-full overflow-hidden flex-shrink-0">
+                          <Image
+                            src={data?.image ? data.image : userImage}
+                            width={60}
+                            height={60}
+                            alt="userImage"
+                            className="object-cover w-full h-full"
+                          />
+                        </div>
+
+                        <div className="flex flex-col">
+                          <Text as='p'
+                            className="font-medium text-[#FFFFFF5C] text-[16px] sm:text-[17px]"
+                            dangerouslySetInnerHTML={{ __html: styledMessage }}
+                          />
+                          <Text className="text-[15px] text-[#FFFFFF5C]">
+                            {data.createdAt
+                              ? formatDistanceToNowStrict(new Date(data.createdAt), {
+                                addSuffix: true,
+                              })
+                              : 'Unknown time'}
+                          </Text>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </li>
-              ))}
+                  </li>
+                );
+              })}
+
             </ul>
           </div>
         )}
