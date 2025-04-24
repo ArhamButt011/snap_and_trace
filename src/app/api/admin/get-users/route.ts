@@ -24,7 +24,7 @@ export async function GET(req: Request) {
             filter = {
                 ...filter,
                 $or: [
-                    { name: searchRegex },
+                    { username: searchRegex },
                     { email: searchRegex },
                     { createdAt: searchRegex },
                 ],

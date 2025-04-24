@@ -44,11 +44,39 @@ export async function POST(req: NextRequest) {
       },
     })
 
+    const html = `
+    <!DOCTYPE html>
+    <html lang="en-US">
+    <head>
+      <meta charset="utf-8" />
+    </head>
+    <body>
+      <h2 style="font-family: Arial, sans-serif; color: #333;">Your OTP Code for Snap & Trace</h2>
+      <p style="font-family: Arial, sans-serif; color: #555;">
+        Dear User,
+      </p>
+      <p style="font-family: Arial, sans-serif; color: #555;">
+        Use the following One-Time Password (OTP) to complete your process:
+      </p>
+      <h3 style="font-family: Arial, sans-serif; color: #00C000;">
+        ${otp}
+      </h3>
+      <p style="font-family: Arial, sans-serif; color: #555;">
+        This code is valid for the next 10 minutes. Please do not share it with anyone.
+      </p>
+      <p style="font-family: Arial, sans-serif; color: #555;">
+        Thank you, <br>
+        The Snap&Trace Team
+      </p>
+    </body>
+    </html>
+    `
+
     await transporter.sendMail({
       from: `"Snap & Trace" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: 'Your Snap & Trace OTP',
-      html: `<p>Your OTP is: <b>${otp}</b>. It will expire in 10 minutes.</p>`,
+      html,
     })
 
     return NextResponse.json({ message: 'OTP sent successfully' }, { status: 200 })

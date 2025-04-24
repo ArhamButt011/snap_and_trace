@@ -239,7 +239,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const [pageName, setPageName] = useLocalStorage('selectedMenu', 'dashboard')
 
   useEffect(() => {
-    document.title = `${pageName} | Lumashape`
+    document.title = `${pageName} | Snap&Trace`
   }, [pageName])
 
   return (

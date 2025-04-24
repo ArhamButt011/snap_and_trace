@@ -44,7 +44,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   const isItemActive = isActive(item)
   useEffect(() => {
     if (isItemActive) {
-      document.title = `${item.label} | Lumashape`
+      document.title = `${item.label} | Snap&Trace`
     }
   }, [isItemActive, item.label])
 
