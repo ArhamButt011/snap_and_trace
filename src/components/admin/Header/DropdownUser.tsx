@@ -317,7 +317,7 @@ const DropdownUser = () => {
                     alt="User"
                   />
                    ) : (
-                    <div className="w-[80px] h-[80px] flex items-center justify-center bg-[#F2F2F2] rounded-full text-[#266CA8] font-semibold text-[42.21px]">
+                    <div className="w-[55px] h-[55px] flex items-center justify-center bg-[#F2F2F2] rounded-full text-[#266CA8] font-semibold text-[38px]">
                       {userData?.username?.charAt(0).toUpperCase()}
                     </div>
                   )} 
