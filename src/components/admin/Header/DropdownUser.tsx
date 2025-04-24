@@ -290,7 +290,6 @@ const DropdownUser = () => {
             />
           </svg>
         </Link>
-
         {/* <!-- Dropdown Start --> */}
         <AnimatePresence>
           {dropdownOpen && (
