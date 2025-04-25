@@ -16,7 +16,6 @@ const DashboardPage = () => {
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-
     const [skeletonCount, setSkeletonCount] = useState(2);
 
     const fetchUsers = async () => {
@@ -60,7 +59,6 @@ const DashboardPage = () => {
 
         return [1, '...', page - 1, page, page + 1, '...', totalPages];
     };
-
 
     return (
         <DefaultLayout>

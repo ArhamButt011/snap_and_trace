@@ -15,7 +15,7 @@ const DashboardPage = () => {
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [charges, setTotalCharges] = useState(1);
+    const [charges, setTotalCharges] = useState(0);
 
 
     const [skeletonCount, setSkeletonCount] = useState(2);
@@ -153,7 +153,7 @@ const DashboardPage = () => {
                                 <div className="divide-y divide-gray-600">
                                     {payments.map((payment: any, i: number) => (
                                         <div key={i} className="py-4 px-2 flex justify-between items-center text-sm">
-                                            <div className="w-1/6 text-[#FFFFFF80] text-start">{i + 1}</div>
+                                            <div className="w-1/6 text-[#FFFFFF80] text-start">#{i + 1}</div>
 
                                             <div className="w-1/4 flex items-center gap-2 text-center">
                                                 <img src={payment.file_image} alt="payment" className="h-10 w-10 rounded-full object-cover" />
