@@ -84,7 +84,7 @@ const DashboardPage = () => {
             </span>
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Search..."t
               value={search}
               onChange={handleSearchChange}
               className="bg-transparent border border-[#FFFFFF1A] text-white pl-10 pr-4 py-2 rounded-full focus:outline-none w-full"
@@ -109,7 +109,7 @@ const DashboardPage = () => {
                 onChange={handleStatusChange}
               >
                 <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
+                <option value="delivered">Delivered</option>
               </select>
             </div>
 

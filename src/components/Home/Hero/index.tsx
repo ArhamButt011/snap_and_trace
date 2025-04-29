@@ -42,7 +42,7 @@ const Hero = () => {
         </div>
       </div>
       <div className="flex items-center gap-4 mt-12 justify-center flex-row tab:flex-col z-10 md:px-0 ">
-        <Image
+        {/* <Image
           src="/images/hero/dxf1.svg"
           height={300}
           width={200}
@@ -62,7 +62,28 @@ const Hero = () => {
           width={200}
           alt="img3"
           className="rounded-xl shadow-md w-full max-w-[462.48px] h-auto"
-        />
+        /> */}
+         <Image
+    src="/images/hero/dxf1.svg"
+    height={300}
+    width={200}
+    alt="img1"
+    className="rounded-xl shadow-md w-full max-w-[462.48px] h-auto transform transition duration-500 hover:scale-105 hover:shadow-lg"
+  />
+  <Image
+    src="/images/hero/dxf2.svg"
+    height={300}
+    width={200}
+    alt="img2"
+    className="rounded-xl shadow-md w-full max-w-[527.7px] tab:max-w-[462.48px] h-auto transform transition duration-500 hover:scale-105 hover:shadow-lg"
+  />
+  <Image
+    src="/images/hero/dxf3.svg"
+    height={300}
+    width={200}
+    alt="img3"
+    className="rounded-xl shadow-md w-full max-w-[462.48px] h-auto transform transition duration-500 hover:scale-105 hover:shadow-lg"
+  />
       </div>
     </section>
   )

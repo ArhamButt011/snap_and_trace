@@ -168,8 +168,8 @@ const menuGroups = [
           </svg>
         ),
 
-        label: 'All Downloads',
-        route: '/admin/all-downloads',
+        label: 'All Documents',
+        route: '/admin/all-documents',
       },
       {
         icon: (
