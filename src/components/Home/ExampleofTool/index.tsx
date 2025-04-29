@@ -7,6 +7,7 @@ import grad from "@/public/images/hero/toolgrad.png"
 import tool1 from "@/public/images/hero/tool1.png"
 import tool2 from "@/public/images/hero/tool2.png"
 import tool3 from "@/public/images/hero/tool3.png"
+import rounded from "@/public/images/hero/rounded.png"
 const ExampleofTool = () => {
     return (
         <div>
@@ -19,7 +20,13 @@ const ExampleofTool = () => {
                     <div className="flex mob:flex-wrap mob:justify-center mt-8 gap-8">
                         <Image className='w-[49%] tab:w-[48%] mob:w-full' src={tool2} alt="poster" width={549} height={549} />
                         <Image className='w-[49%] tab:w-[48%] mob:w-full' src={tool3} alt="poster" width={549} height={549} />
-
+                        <Image
+                            src={rounded}
+                            alt="decorative"
+                            width={500} // adjust size as needed
+                            height={500}
+                            className="absolute bottom-[-140px] left-1/2 -translate-x-1/2 -z-10 pointer-events-none"
+                        />
                     </div>
                 </div>
 

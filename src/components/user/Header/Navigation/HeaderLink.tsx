@@ -10,11 +10,13 @@ const HeaderLink: React.FC<{ item: HeaderItem;  }> = ({ item }) => {
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.includes('#')) {
-      e.preventDefault()
+      e.preventDefault()      
       const id = href.split('#')[1]
       scrollToId(id)
+      window.history.pushState(null, '', `#${id}`)
     }
   }
+  
 
   const idFromHref = item.href.includes('#') ? item.href.split('#')[1] : ''
 
@@ -26,6 +28,7 @@ const HeaderLink: React.FC<{ item: HeaderItem;  }> = ({ item }) => {
     >
       <NavLink
         href={item.href}
+        activeClassName="!text-[#a8e543]" // Active color set to #a8e543
         className={`header-link flex items-center gap-1 `}
         onClick={(e) => handleClick(e, item.href)}
       >
@@ -38,6 +41,7 @@ const HeaderLink: React.FC<{ item: HeaderItem;  }> = ({ item }) => {
             <NavLink
               key={index}
               href={subItem.href}
+              activeClassName="!text-[#a8e543]" // Active submenu links also use #a8e543
               className="block px-4 py-2 text-white hover:bg-accent hover:text-dark transition-colors duration-200"
               onClick={(e) => handleClick(e, subItem.href)}
             >

@@ -74,13 +74,16 @@ const Questions = () => {
   };
 
   return (
-    <div id="faq-section" className="overflow-hidden  text-white ">
-          <Text as="h1" className="text-[46.93px] text-center font-bold font-raleway  text-white  mb-[27px]">
-            Frequently Asked Questions
-          </Text>
-          <Text  className="text-center text-[19.78px] mb-[77px]">
-          Here is everything that you want to know about the poduct and working
-          </Text>
+    <div id="faq-section" className="relative overflow-hidden text-white">
+      {/* Glowing background */}
+      <div className="absolute bottom-[70px] left-1/2 -translate-x-1/2 w-[425px] h-[425px] rounded-full bg-[#A8E54380] blur-[390px] z-[-1] pointer-events-none" />
+
+      <Text as="h1" className="text-[46.93px] text-center font-bold font-raleway text-white mb-[27px]">
+        Frequently Asked Questions
+      </Text>
+      <Text className="text-center text-[19.78px] mb-[77px]">
+        Here is everything that you want to know about the product and working
+      </Text>
 
       <div
         className="mx-auto mt-[20px] max-w-[815px] mob:w-full mob:px-[0px]"

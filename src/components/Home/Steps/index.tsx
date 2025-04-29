@@ -56,7 +56,7 @@ const Steps = () => {
   return (
     <div className='px-5 mb-[120px]'>
       <div className="w-full max-w-[1131px] mx-auto">
-        {steps.map((step, index) => (
+        {/* {steps.map((step, index) => (
           <div key={index}>
             <div className="flex gap-[30px] mob:gap-[15px] items-center">
               <Image className='mob:w-[70px]' src={step.img} alt={`step${index + 1}`} width={127} height={127} />
@@ -74,7 +74,40 @@ const Steps = () => {
               <div className="w-[2.6px] bg-accent h-[64px] ml-[54px] mob:ml-[30px]"></div>
             )}
           </div>
-        ))}
+        ))} */}
+        {steps.map((step, index) => (
+  <div key={index} className="relative z-10">
+    <div className="flex gap-[30px] mob:gap-[15px] items-center">
+      <Image className='mob:w-[70px]' src={step.img} alt={`step${index + 1}`} width={127} height={127} />
+      <div className="bg-[#FFFFFF]/10 rounded-[13px] w-full px-5 py-4">
+        <Text>Step {String(index + 1).padStart(2, '0')}</Text>
+        <Text className='text-[26px] text-white font-medium'>
+          {step.title}
+          {step.note && (
+            <span className='text-[#FFFFFF80] text-[24px] ml-2 mob:text-[16px] mob:leading-[22.2px] mob:mt-2'>{step.note}</span>
+          )}
+        </Text>
+      </div>
+    </div>
+
+    {index === 3 && (
+      <div className="absolute left-1/2 top-[50%] -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none">
+        <div
+          className="w-[600px] h-[600px] rounded-full bg-[#A8E54380] blur-[779.38586px]"
+          style={{
+            filter: 'blur(779.3858642578125px)',
+            backgroundColor: '#A8E54380',
+          }}
+        ></div>
+      </div>
+    )}
+
+    {index !== steps.length - 1 && (
+      <div className="w-[2.6px] bg-accent h-[64px] ml-[54px] mob:ml-[30px]"></div>
+    )}
+  </div>
+))}
+
       </div>
     </div>
   );

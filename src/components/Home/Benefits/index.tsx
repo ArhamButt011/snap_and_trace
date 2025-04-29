@@ -23,14 +23,10 @@ const Benefits = () => {
           {/* Button with glow effect */}
           <div className="relative flex justify-center items-center mt-10">
             {/* Glowing background */}
-            {/* <div className="absolute z-20 w-[600px] h-[600px] rounded-full 
-              bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] 
-              from-[#A8E543]/30 via-[#AAFFAA]/15 to-transparent blur-2xl pointer-events-none">
-            </div> */}
             <div className="absolute z-20 w-[600px] h-[600px] rounded-full 
-  bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] 
-  from-[#CCF6A3]/25 via-[#DFFFCC]/10 to-transparent blur-2xl pointer-events-none">
-</div>
+              bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] 
+              from-[#CCF6A3]/25 via-[#DFFFCC]/10 to-transparent blur-2xl pointer-events-none">
+            </div>
 
 
             {/* Button on top of glow */}
